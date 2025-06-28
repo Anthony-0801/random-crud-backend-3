@@ -1,29 +1,38 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDTO } from './dto/create-episode.dto';
+import { isPositivePipe } from './pipes/is-positive.pipe';
 
 @Controller('episodes')
 export class EpisodesController {
   constructor(private episodesService: EpisodesService) {}
 
   @Get()
-  findAll(@Query('sort') sort: 'asc' | 'desc' = 'desc') {
+  findAll(
+    @Query('sort') sort: 'asc' | 'desc' = 'desc',
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe, isPositivePipe)
+    limit: number,
+  ) {
     console.log('Sort value is: ', sort);
+    console.log('Limit value is: ', limit);
     return this.episodesService.findAll(sort);
   }
 
   @Post()
-  create(@Body() input: CreateEpisodeDTO) {
+  create(@Body(ValidationPipe) input: CreateEpisodeDTO) {
     console.log('Input data is: ', input);
     return this.episodesService.create(input);
   }
