@@ -3,13 +3,11 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const apiKey = request.headers('X-API-KEY');
+    const apiKey = request.header('X-API-KEY');
 
-    if (!apiKey || apiKey !== 'pooh-key') {
+    if (apiKey !== 'pooh-key') {
       return false;
     }
 

@@ -10,12 +10,15 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDTO } from './dto/create-episode.dto';
 import { isPositivePipe } from './pipes/is-positive.pipe';
+import { ApiKeyGuard } from 'src/guards/api-key.guard';
 
+@UseGuards(ApiKeyGuard)
 @Controller('episodes')
 export class EpisodesController {
   constructor(private episodesService: EpisodesService) {}
