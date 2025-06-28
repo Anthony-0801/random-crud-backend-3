@@ -8,30 +8,34 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { EpisodesService } from './episodes.service';
+import { CreateEpisodeDTO } from './dto/create-episode.dto';
 
 @Controller('episodes')
 export class EpisodesController {
+  constructor(private episodesService: EpisodesService) {}
+
   @Get()
   findAll(@Query('sort') sort: 'asc' | 'desc' = 'desc') {
     console.log('Sort value is: ', sort);
-    return 'This action returns all episodes';
+    return this.episodesService.findAll(sort);
   }
 
   @Post()
-  create(@Body() input: any) {
+  create(@Body() input: CreateEpisodeDTO) {
     console.log('Input data is: ', input);
-    return 'This action creates a new episode';
+    return this.episodesService.create(input);
   }
 
   @Get('featured')
   findFeatured() {
-    return 'This action returns featured episodes';
+    return this.episodesService.findFeatured();
   }
 
   @Get(':id')
   findOne(@Param() id: string) {
     console.log('Episode ID is: ', id);
-    return 'This action returns a specific episode with id';
+    return this.episodesService.findOne(id);
   }
 
   @Put(':id')
