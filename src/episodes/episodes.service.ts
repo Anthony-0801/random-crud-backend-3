@@ -20,7 +20,7 @@ export class EpisodesService {
     return this.episodes.filter((episodes) => episodes.featured);
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.episodes.find((episode) => episode.id === id);
   }
 

@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -33,9 +34,13 @@ export class EpisodesController {
   }
 
   @Get(':id')
-  findOne(@Param() id: string) {
+  async findOne(@Param() id: string) {
     console.log('Episode ID is: ', id);
-    return this.episodesService.findOne(id);
+    const episode = await this.episodesService.findOne(id);
+    if (!episode) {
+      throw new NotFoundException('Episode not found');
+    }
+    return episode;
   }
 
   @Put(':id')
